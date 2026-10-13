@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Read HTTP request and response structure, understand headers, and inspect illustrative JSON messages.">
+  <title>Requests &amp; Responses | REST API Development Guide</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">/</span>REST<span class="brand-light">fieldnotes</span></a><nav aria-label="Header navigation"><a href="index.html">Guide overview</a><a href="examples-resources.html#additional-resources">Resources ↗</a></nav></div></header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <nav aria-label="Chapters"><p class="nav-heading">REST API Development Guide</p><ol class="chapter-nav"><li><a href="index.html"><span>01</span>Overview</a></li>
+<li><a href="http-rest.html"><span>02</span>HTTP &amp; REST</a></li>
+<li><a href="methods-status.html"><span>03</span>Methods &amp; Status Codes</a></li>
+<li><a href="requests-responses.html" aria-current="page"><span>04</span>Requests &amp; Responses</a></li>
+<li><a href="security-design.html"><span>05</span>Security &amp; API Design</a></li>
+<li><a href="examples-resources.html"><span>06</span>Examples &amp; Resources</a></li></ol></nav>
+      <details class="topic-disclosure"><summary>All 12 guide topics</summary><nav aria-label="Topic index"><ul class="topic-nav"><li><a href="index.html#introduction">Introduction</a></li>
+<li><a href="http-rest.html#http-fundamentals">HTTP Fundamentals</a></li>
+<li><a href="http-rest.html#rest-architecture">REST Architecture</a></li>
+<li><a href="methods-status.html#http-methods">HTTP Methods</a></li>
+<li><a href="methods-status.html#status-codes">Status Codes</a></li>
+<li><a href="requests-responses.html#message-structure">Request &amp; Response Structure</a></li>
+<li><a href="security-design.html#authentication">Authentication &amp; Authorization</a></li>
+<li><a href="security-design.html#versioning">API Versioning</a></li>
+<li><a href="security-design.html#error-handling">Error Handling</a></li>
+<li><a href="security-design.html#best-practices">API Best Practices</a></li>
+<li><a href="examples-resources.html#code-examples">Code Examples</a></li>
+<li><a href="examples-resources.html#additional-resources">Additional Resources</a></li></ul></nav></details>
+      <p class="sidebar-note">A static learning reference.<br>HTML &amp; CSS only.</p>
+    </aside>
+    <main id="main-content" tabindex="-1">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Guide</a><span aria-hidden="true">/</span><span aria-current="page">Requests &amp; Responses</span></nav>
+      <article class="chapter">
+        <header class="chapter-header"><p class="eyebrow">Chapter 04 / 06</p><h1>Requests &amp; Responses</h1><p class="chapter-intro">Read the message, not just the JSON.</p><p class="chapter-meta">Learning reference · Static documentation</p></header>
+        <nav class="on-this-page" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#message-structure">Message structure</a></li>
+<li><a href="#request-response">Request and response</a></li>
+<li><a href="#representations">JSON representations</a></li></ul></nav>
+        <section id="message-structure" aria-labelledby="message-title"><h2 id="message-title">Request and response structure</h2><p>In HTTP/1.1 text notation, a request starts with method, target, and protocol version; a response starts with protocol version and status. Headers follow, then an empty line separates headers from optional content.</p><p>HTTP/2 and HTTP/3 encode messages differently; the text examples here teach logical structure rather than describing every protocol's wire format.</p><dl class="definition-list"><div><dt><code>Host</code></dt><dd>Identifies the target host in HTTP/1.1 requests.</dd></div><div><dt><code>Accept</code></dt><dd>Describes preferred response media types.</dd></div><div><dt><code>Content-Type</code></dt><dd>Describes the media type of the content being sent.</dd></div><div><dt><code>Authorization</code></dt><dd>Carries credentials for the chosen authentication scheme.</dd></div><div><dt><code>Location</code></dt><dd>Identifies a related location, such as a newly created resource.</dd></div></dl><p class="source">Reference: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages">MDN — HTTP messages</a>.</p></section>
+<section id="request-response" aria-labelledby="exchange-title"><h2 id="exchange-title">Follow a simple exchange</h2><p>This hypothetical client requests one project representation. No request is sent by this website.</p><figure class="code-example"><figcaption>Illustrative GET request</figcaption><pre tabindex="0" aria-label="GET request code"><code>GET /v1/projects/42 HTTP/1.1
+Host: api.example.com
+Accept: application/json</code></pre></figure><figure class="code-example"><figcaption>Illustrative response — selected headers shown</figcaption><pre tabindex="0" aria-label="JSON response code"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "42",
+  "name": "Documentation refresh",
+  "status": "in_progress"
+}</code></pre></figure><p>Message framing and transport headers are omitted for readability. These are explanatory excerpts, not complete byte-for-byte wire messages.</p><p class="source">Reference: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages">MDN — Request and response anatomy</a>.</p></section>
+<section id="representations" aria-labelledby="json-title"><h2 id="json-title">JSON representations</h2><p>JSON expresses objects, arrays, strings, numbers, booleans, and null. Keys are quoted strings; comments and trailing commas are not valid JSON. JSON is a common API format, not a REST requirement.</p><p>Define field types, required properties, validation rules, and the meaning of omitted versus null values in your contract. A successful response should return only the information the caller is permitted to see.</p><aside class="callout"><h3>Headers answer different questions</h3><p><code>Accept: application/json</code> asks for JSON in the response. <code>Content-Type: application/json</code> identifies JSON in the message being sent. Neither replaces authentication or input validation.</p></aside><p class="source">References: <a href="https://www.rfc-editor.org/rfc/rfc8259.html">RFC 8259 — JSON</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages">MDN — Message metadata</a>.</p></section>
+      </article>
+      <nav class="page-navigation" aria-label="Chapter pagination"><a href="methods-status.html" rel="prev"><span>← Previous chapter</span><strong>Methods &amp; Status Codes</strong></a>
+<a href="security-design.html" rel="next"><span>Next chapter →</span><strong>Security &amp; API Design</strong></a></nav>
+      <footer class="page-footer"><p>REST fieldnotes · Academic portfolio project by Karan Satyajit Chauhan.</p><p>Created with OpenAI Codex assistance. No functioning API is included.</p><a href="#main-content">Back to content ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>

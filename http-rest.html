@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Understand HTTP fundamentals, REST constraints, resource representations, and stateless communication.">
+  <title>HTTP &amp; REST | REST API Development Guide</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">/</span>REST<span class="brand-light">fieldnotes</span></a><nav aria-label="Header navigation"><a href="index.html">Guide overview</a><a href="examples-resources.html#additional-resources">Resources ↗</a></nav></div></header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <nav aria-label="Chapters"><p class="nav-heading">REST API Development Guide</p><ol class="chapter-nav"><li><a href="index.html"><span>01</span>Overview</a></li>
+<li><a href="http-rest.html" aria-current="page"><span>02</span>HTTP &amp; REST</a></li>
+<li><a href="methods-status.html"><span>03</span>Methods &amp; Status Codes</a></li>
+<li><a href="requests-responses.html"><span>04</span>Requests &amp; Responses</a></li>
+<li><a href="security-design.html"><span>05</span>Security &amp; API Design</a></li>
+<li><a href="examples-resources.html"><span>06</span>Examples &amp; Resources</a></li></ol></nav>
+      <details class="topic-disclosure"><summary>All 12 guide topics</summary><nav aria-label="Topic index"><ul class="topic-nav"><li><a href="index.html#introduction">Introduction</a></li>
+<li><a href="http-rest.html#http-fundamentals">HTTP Fundamentals</a></li>
+<li><a href="http-rest.html#rest-architecture">REST Architecture</a></li>
+<li><a href="methods-status.html#http-methods">HTTP Methods</a></li>
+<li><a href="methods-status.html#status-codes">Status Codes</a></li>
+<li><a href="requests-responses.html#message-structure">Request &amp; Response Structure</a></li>
+<li><a href="security-design.html#authentication">Authentication &amp; Authorization</a></li>
+<li><a href="security-design.html#versioning">API Versioning</a></li>
+<li><a href="security-design.html#error-handling">Error Handling</a></li>
+<li><a href="security-design.html#best-practices">API Best Practices</a></li>
+<li><a href="examples-resources.html#code-examples">Code Examples</a></li>
+<li><a href="examples-resources.html#additional-resources">Additional Resources</a></li></ul></nav></details>
+      <p class="sidebar-note">A static learning reference.<br>HTML &amp; CSS only.</p>
+    </aside>
+    <main id="main-content" tabindex="-1">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Guide</a><span aria-hidden="true">/</span><span aria-current="page">HTTP &amp; REST</span></nav>
+      <article class="chapter">
+        <header class="chapter-header"><p class="eyebrow">Chapter 02 / 06</p><h1>HTTP &amp; REST</h1><p class="chapter-intro">A shared protocol. A deliberate architectural style.</p><p class="chapter-meta">Learning reference · Static documentation</p></header>
+        <nav class="on-this-page" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#http-fundamentals">HTTP fundamentals</a></li>
+<li><a href="#rest-architecture">REST architecture</a></li>
+<li><a href="#statelessness">Stateless communication</a></li></ul></nav>
+        <section id="http-fundamentals" aria-labelledby="http-title"><h2 id="http-title">HTTP fundamentals</h2><p>HTTP uses a request–response model. A client addresses a resource and expresses intent through a method; a server communicates the result through status, headers, and optional content. HTTP semantics are shared across protocol versions, while their wire formats differ.</p><p>Resource identifiers and representations serve different purposes: <code>/projects/42</code> identifies a resource, while JSON might describe its current state. A representation is not necessarily a database row.</p><p class="source">Reference: <a href="https://www.rfc-editor.org/rfc/rfc9110.html">RFC 9110 — HTTP Semantics</a>.</p><div class="flow-diagram" aria-label="Client sends request to server; server returns response"><div><strong>Client</strong><span>Chooses resource and intent</span></div><p>Request →<br>← Response</p><div><strong>Server</strong><span>Processes and represents state</span></div></div></section>
+<section id="rest-architecture" aria-labelledby="rest-title"><h2 id="rest-title">REST architecture</h2><p>REST—Representational State Transfer—is an architectural style defined through constraints, not a synonym for JSON over HTTP.</p><dl class="definition-list"><div><dt>Client–server</dt><dd>Separate interface concerns from data and service concerns.</dd></div><div><dt>Stateless</dt><dd>Each request supplies the context needed to understand it.</dd></div><div><dt>Cacheable</dt><dd>Responses identify whether reuse is permitted, supporting efficiency.</dd></div><div><dt>Uniform interface</dt><dd>Use resource identification, representations for manipulation, self-descriptive messages, and hypermedia to guide application transitions.</dd></div><div><dt>Layered system</dt><dd>Clients need not know whether an intermediary or origin server handles an interaction.</dd></div><div><dt>Code on demand (optional)</dt><dd>A server may extend client behavior by supplying executable code.</dd></div></dl><p>Hypermedia means responses can provide links or controls for the next available action. An API using resource-oriented URLs but omitting this constraint may be better described as an HTTP API rather than claiming full REST adherence.</p><p class="source">Reference: <a href="https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">Fielding — REST architectural constraints</a>.</p></section>
+<section id="statelessness" aria-labelledby="stateless-title"><h2 id="stateless-title">Stateless communication</h2><p>A request should not require the server to remember a previous conversational step in order to interpret it. Include the resource identifier, credentials when needed, and applicable request data.</p><aside class="callout"><h3>Stateless does not mean storage-free</h3><p>A server can persist projects, accounts, and other resource state. The constraint concerns client session context between requests, not the absence of a database.</p></aside><p>For example, retrieving a project should identify that project and supply required access information without depending on a preceding “select project” request.</p><p class="source">Reference: <a href="https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_3">Fielding — Stateless constraint</a>.</p></section>
+      </article>
+      <nav class="page-navigation" aria-label="Chapter pagination"><a href="index.html" rel="prev"><span>← Previous chapter</span><strong>Overview</strong></a>
+<a href="methods-status.html" rel="next"><span>Next chapter →</span><strong>Methods &amp; Status Codes</strong></a></nav>
+      <footer class="page-footer"><p>REST fieldnotes · Academic portfolio project by Karan Satyajit Chauhan.</p><p>Created with OpenAI Codex assistance. No functioning API is included.</p><a href="#main-content">Back to content ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>

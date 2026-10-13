@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn GET, POST, PUT, PATCH, DELETE, common response statuses, and safe versus idempotent operations.">
+  <title>Methods &amp; Status Codes | REST API Development Guide</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">/</span>REST<span class="brand-light">fieldnotes</span></a><nav aria-label="Header navigation"><a href="index.html">Guide overview</a><a href="examples-resources.html#additional-resources">Resources ↗</a></nav></div></header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <nav aria-label="Chapters"><p class="nav-heading">REST API Development Guide</p><ol class="chapter-nav"><li><a href="index.html"><span>01</span>Overview</a></li>
+<li><a href="http-rest.html"><span>02</span>HTTP &amp; REST</a></li>
+<li><a href="methods-status.html" aria-current="page"><span>03</span>Methods &amp; Status Codes</a></li>
+<li><a href="requests-responses.html"><span>04</span>Requests &amp; Responses</a></li>
+<li><a href="security-design.html"><span>05</span>Security &amp; API Design</a></li>
+<li><a href="examples-resources.html"><span>06</span>Examples &amp; Resources</a></li></ol></nav>
+      <details class="topic-disclosure"><summary>All 12 guide topics</summary><nav aria-label="Topic index"><ul class="topic-nav"><li><a href="index.html#introduction">Introduction</a></li>
+<li><a href="http-rest.html#http-fundamentals">HTTP Fundamentals</a></li>
+<li><a href="http-rest.html#rest-architecture">REST Architecture</a></li>
+<li><a href="methods-status.html#http-methods">HTTP Methods</a></li>
+<li><a href="methods-status.html#status-codes">Status Codes</a></li>
+<li><a href="requests-responses.html#message-structure">Request &amp; Response Structure</a></li>
+<li><a href="security-design.html#authentication">Authentication &amp; Authorization</a></li>
+<li><a href="security-design.html#versioning">API Versioning</a></li>
+<li><a href="security-design.html#error-handling">Error Handling</a></li>
+<li><a href="security-design.html#best-practices">API Best Practices</a></li>
+<li><a href="examples-resources.html#code-examples">Code Examples</a></li>
+<li><a href="examples-resources.html#additional-resources">Additional Resources</a></li></ul></nav></details>
+      <p class="sidebar-note">A static learning reference.<br>HTML &amp; CSS only.</p>
+    </aside>
+    <main id="main-content" tabindex="-1">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Guide</a><span aria-hidden="true">/</span><span aria-current="page">Methods &amp; Status Codes</span></nav>
+      <article class="chapter">
+        <header class="chapter-header"><p class="eyebrow">Chapter 03 / 06</p><h1>Methods &amp; Status Codes</h1><p class="chapter-intro">Make request intent and response outcomes predictable.</p><p class="chapter-meta">Learning reference · Static documentation</p></header>
+        <nav class="on-this-page" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#http-methods">HTTP methods</a></li>
+<li><a href="#retry-semantics">Safety and idempotency</a></li>
+<li><a href="#status-codes">Status codes</a></li></ul></nav>
+        <section id="http-methods" aria-labelledby="methods-title"><h2 id="methods-title">HTTP methods</h2><dl class="definition-list"><div><dt><code>GET</code></dt><dd>Retrieve a representation. Do not design it to request state changes.</dd></div><div><dt><code>POST</code></dt><dd>Ask the target to process supplied content; creating a collection member is one common use.</dd></div><div><dt><code>PUT</code></dt><dd>Create or replace the target resource's state using the supplied representation.</dd></div><div><dt><code>PATCH</code></dt><dd>Apply changes described by a patch document. Document the supported media type and update semantics.</dd></div><div><dt><code>DELETE</code></dt><dd>Remove the target's association with its current functionality; this does not guarantee physical data erasure.</dd></div></dl><p class="source">References: <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3">RFC 9110 — Methods</a> and <a href="https://www.rfc-editor.org/rfc/rfc5789.html">RFC 5789 — PATCH</a>.</p></section>
+<section id="retry-semantics" aria-labelledby="retry-title"><h2 id="retry-title">Safety and idempotency</h2><p><strong>Safe</strong> methods have read-only intended semantics. Logging or metering may still occur. <strong>Idempotent</strong> means repeating an identical request has the same intended server effect as making it once; response codes can differ.</p><ul><li><code>GET</code> is safe and idempotent.</li><li><code>PUT</code> and <code>DELETE</code> are idempotent but not safe.</li><li><code>POST</code> and <code>PATCH</code> do not generally guarantee idempotency.</li></ul><p>A particular PATCH operation can be designed to be idempotent: setting a title to a fixed value differs from incrementing a counter. Concurrent updates may require conditional requests, such as <code>If-Match</code>, to avoid lost updates.</p><aside class="callout"><h3>Plan retries explicitly</h3><p>Do not retry a creation request blindly after a timeout: the server may already have completed it. If your contract supports deduplication keys, document their scope and lifetime.</p></aside><p class="source">References: <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2">RFC 9110 — Method properties</a> and <a href="https://www.rfc-editor.org/rfc/rfc5789.html#section-2">RFC 5789 — PATCH semantics</a>.</p></section>
+<section id="status-codes" aria-labelledby="status-title"><h2 id="status-title">Common status codes</h2><p>Families distinguish informational responses (1xx), success (2xx), redirection (3xx), client errors (4xx), and server errors (5xx). Choose a status reflecting the actual outcome.</p><div class="status-grid"><article><h3><code>200</code> OK</h3><p>Successful request; content depends on the method.</p></article><article><h3><code>201</code> Created</h3><p>One or more resources created; commonly include Location for the new resource.</p></article><article><h3><code>204</code> No Content</h3><p>Successful request with no response content.</p></article><article><h3><code>400</code> Bad Request</h3><p>Request cannot be processed because of a client error.</p></article><article><h3><code>401</code> Unauthorized</h3><p>Valid authentication credentials are missing; includes a WWW-Authenticate challenge.</p></article><article><h3><code>403</code> Forbidden</h3><p>Server understands but refuses the request.</p></article><article><h3><code>404</code> Not Found</h3><p>Resource unavailable or its existence is not disclosed.</p></article><article><h3><code>409</code> Conflict</h3><p>Request conflicts with current resource state.</p></article><article><h3><code>422</code> Unprocessable Content</h3><p>Content type and syntax understood, but instructions cannot be processed.</p></article><article><h3><code>429</code> Too Many Requests</h3><p>Client has exceeded a request limit.</p></article><article><h3><code>500</code> Internal Server Error</h3><p>Unexpected server condition prevented completion.</p></article><article><h3><code>503</code> Service Unavailable</h3><p>Temporary overload or maintenance prevents service.</p></article></div><p class="source">Reference: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status">MDN — HTTP response status codes</a>.</p></section>
+      </article>
+      <nav class="page-navigation" aria-label="Chapter pagination"><a href="http-rest.html" rel="prev"><span>← Previous chapter</span><strong>HTTP &amp; REST</strong></a>
+<a href="requests-responses.html" rel="next"><span>Next chapter →</span><strong>Requests &amp; Responses</strong></a></nav>
+      <footer class="page-footer"><p>REST fieldnotes · Academic portfolio project by Karan Satyajit Chauhan.</p><p>Created with OpenAI Codex assistance. No functioning API is included.</p><a href="#main-content">Back to content ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>

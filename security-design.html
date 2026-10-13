@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn authentication, authorization, versioning, error handling, pagination, rate limiting, and API best practices.">
+  <title>Security &amp; API Design | REST API Development Guide</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">/</span>REST<span class="brand-light">fieldnotes</span></a><nav aria-label="Header navigation"><a href="index.html">Guide overview</a><a href="examples-resources.html#additional-resources">Resources ↗</a></nav></div></header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <nav aria-label="Chapters"><p class="nav-heading">REST API Development Guide</p><ol class="chapter-nav"><li><a href="index.html"><span>01</span>Overview</a></li>
+<li><a href="http-rest.html"><span>02</span>HTTP &amp; REST</a></li>
+<li><a href="methods-status.html"><span>03</span>Methods &amp; Status Codes</a></li>
+<li><a href="requests-responses.html"><span>04</span>Requests &amp; Responses</a></li>
+<li><a href="security-design.html" aria-current="page"><span>05</span>Security &amp; API Design</a></li>
+<li><a href="examples-resources.html"><span>06</span>Examples &amp; Resources</a></li></ol></nav>
+      <details class="topic-disclosure"><summary>All 12 guide topics</summary><nav aria-label="Topic index"><ul class="topic-nav"><li><a href="index.html#introduction">Introduction</a></li>
+<li><a href="http-rest.html#http-fundamentals">HTTP Fundamentals</a></li>
+<li><a href="http-rest.html#rest-architecture">REST Architecture</a></li>
+<li><a href="methods-status.html#http-methods">HTTP Methods</a></li>
+<li><a href="methods-status.html#status-codes">Status Codes</a></li>
+<li><a href="requests-responses.html#message-structure">Request &amp; Response Structure</a></li>
+<li><a href="security-design.html#authentication">Authentication &amp; Authorization</a></li>
+<li><a href="security-design.html#versioning">API Versioning</a></li>
+<li><a href="security-design.html#error-handling">Error Handling</a></li>
+<li><a href="security-design.html#best-practices">API Best Practices</a></li>
+<li><a href="examples-resources.html#code-examples">Code Examples</a></li>
+<li><a href="examples-resources.html#additional-resources">Additional Resources</a></li></ul></nav></details>
+      <p class="sidebar-note">A static learning reference.<br>HTML &amp; CSS only.</p>
+    </aside>
+    <main id="main-content" tabindex="-1">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Guide</a><span aria-hidden="true">/</span><span aria-current="page">Security &amp; API Design</span></nav>
+      <article class="chapter">
+        <header class="chapter-header"><p class="eyebrow">Chapter 05 / 06</p><h1>Security &amp; API Design</h1><p class="chapter-intro">A reliable contract includes the difficult cases.</p><p class="chapter-meta">Learning reference · Static documentation</p></header>
+        <nav class="on-this-page" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#authentication">Authentication and authorization</a></li>
+<li><a href="#versioning">API versioning</a></li>
+<li><a href="#error-handling">Error handling</a></li>
+<li><a href="#best-practices">API best practices</a></li>
+<li><a href="#pagination">Pagination</a></li>
+<li><a href="#rate-limiting">Rate limiting</a></li></ul></nav>
+        <section id="authentication" aria-labelledby="auth-title"><h2 id="auth-title">Authentication and authorization</h2><p><strong>Authentication</strong> establishes identity or verifies credentials. <strong>Authorization</strong> determines whether that caller may perform an action on a specific resource. Both must be enforced server-side; hiding a client control is insufficient.</p><p>Bearer access tokens can be sent in an <code>Authorization</code> header. Anyone possessing a bearer token can use it, so protect it in transit and storage. Use HTTPS, avoid putting tokens in URLs, and do not publish credentials in examples or logs.</p><p>OAuth 2.0 is an authorization framework; it is not, by itself, a user authentication protocol. API keys may identify an application or project and should not automatically be treated as proof of a user's identity.</p><aside class="callout"><h3>Check resource access every time</h3><p>Possessing a valid token does not mean the caller may read every project. Check permissions for the requested object and operation. CORS is a browser policy, not a substitute for authorization.</p></aside><p class="source">References: <a href="https://www.rfc-editor.org/rfc/rfc6750.html">RFC 6750 — Bearer tokens</a> and <a href="https://www.rfc-editor.org/rfc/rfc6749.html">RFC 6749 — OAuth 2.0</a>.</p></section>
+<section id="versioning" aria-labelledby="version-title"><h2 id="version-title">API versioning</h2><p>Versioning communicates breaking contract changes. A path such as <code>/v1/projects</code> is an easy-to-read convention; header or media-type strategies are alternatives. HTTP does not require one universal API versioning scheme.</p><p>Choose a strategy deliberately, document compatibility guarantees, announce deprecations, and provide a migration window. Even adding a field may break clients that assume a closed schema, so test consumer expectations rather than assuming every additive change is harmless.</p></section>
+<section id="error-handling" aria-labelledby="error-title"><h2 id="error-title">Error-handling conventions</h2><p>Return an appropriate HTTP status and a predictable body. RFC 9457 defines problem details, commonly sent as <code>application/problem+json</code>, with members such as <code>type</code>, <code>title</code>, <code>status</code>, <code>detail</code>, and <code>instance</code>.</p><p>Use stable problem types for client logic, rather than asking clients to parse human-readable messages. The optional <code>status</code> member should match the actual response status when present. Define extensions for field validation when needed.</p><p>Describe the problem usefully without exposing stack traces, secrets, internal infrastructure, or sensitive records. Correlation identifiers can help support teams find detailed server-side logs.</p><p class="source">Reference: <a href="https://www.rfc-editor.org/rfc/rfc9457.html">RFC 9457 — Problem Details for HTTP APIs</a>.</p></section>
+<section id="best-practices" aria-labelledby="practices-title"><h2 id="practices-title">API best practices</h2><p>The following are design recommendations for this guide, not mandatory REST naming rules:</p><ul><li>Use consistent resource names and document method semantics.</li><li>Validate input types, sizes, ranges, and allowed operations.</li><li>Apply access checks to resources and returned fields.</li><li>Document successful, empty, invalid, unauthorized, and unavailable outcomes.</li><li>Bound collection sizes and expensive operations.</li><li>Specify time formats, ordering, null behavior, and compatibility policies.</li><li>Test contracts and observe failures while redacting sensitive data.</li></ul></section>
+<section id="pagination" aria-labelledby="pagination-title"><h2 id="pagination-title">Pagination</h2><p>Return a bounded slice of a collection. Offset pagination can be straightforward, but insertions or deletions between requests can shift results. Cursor pagination uses a continuation value tied to a documented ordering and can better suit changing collections.</p><p>A contract might return <code>data</code> and <code>next_cursor</code>. This shape is illustrative, not a universal standard. Define page-size limits, deterministic sorting with a tie-breaker, how filters interact with cursors, and how the client recognizes the end. Snapshot guarantees require explicit server support.</p></section>
+<section id="rate-limiting" aria-labelledby="rate-title"><h2 id="rate-title">Rate limiting</h2><p>Rate limits bound request volume under a documented policy, such as requests per account per time window. A server can return <code>429 Too Many Requests</code> and may include <code>Retry-After</code>. That field can specify a delay in seconds or an HTTP date.</p><p>Clients should respect retry guidance, cap retries, and use backoff with jitter where appropriate. A retry still needs to account for the operation's idempotency. Document limits and avoid assuming that every API exposes the same quota headers.</p><p class="source">References: <a href="https://www.rfc-editor.org/rfc/rfc6585.html#section-4">RFC 6585 — 429</a> and <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3">RFC 9110 — Retry-After</a>.</p></section>
+      </article>
+      <nav class="page-navigation" aria-label="Chapter pagination"><a href="requests-responses.html" rel="prev"><span>← Previous chapter</span><strong>Requests &amp; Responses</strong></a>
+<a href="examples-resources.html" rel="next"><span>Next chapter →</span><strong>Examples &amp; Resources</strong></a></nav>
+      <footer class="page-footer"><p>REST fieldnotes · Academic portfolio project by Karan Satyajit Chauhan.</p><p>Created with OpenAI Codex assistance. No functioning API is included.</p><a href="#main-content">Back to content ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>
